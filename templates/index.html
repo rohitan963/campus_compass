@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Campus Political Compass Quiz</title>
+  </head>
+  <body>
+    <h1>Campus Political Compass Quiz</h1>
+    <form action="/result" method="post">
+      <!-- Question 1 -->
+      <h2>1. National politics: which statement best represents your views?</h2>
+      <label>
+        <input type="radio" name="q1" value="q1_a1" required>
+        I don’t think about national politics very much
+      </label><br>
+      <label>
+        <input type="radio" name="q1" value="q1_a2">
+        National politics is important, but pretty different from politics on campus
+      </label><br>
+      <label>
+        <input type="radio" name="q1" value="q1_a3">
+        Princeton is a key player in questions of national politics and students need to make their voices heard
+      </label><br>
+      <label>
+        <input type="radio" name="q1" value="q1_a4">
+        Princeton is hopelessly biased when it comes to questions of national politics, and our goal should be to push back on political excesses and make it a cathedral of learning
+      </label>
+      
+      <!-- Question 2 -->
+      <h2>2. New campus architecture: which statement best represents your views?</h2>
+      <label>
+        <input type="radio" name="q2" value="q2_a1" required>
+        Ackshually, according to the American Association of Architects, Princeton’s new architecture is amazing …
+      </label><br>
+      <label>
+        <input type="radio" name="q2" value="q2_a2">
+        Princeton’s priority of making environmentally-sustainable buildings ultimately has to be admired, even if we don’t love the architectural style
+      </label><br>
+      <label>
+        <input type="radio" name="q2" value="q2_a3">
+        The bland, gray architectural style is evidence of the ideological capture of DEI over the once-great Princeton landscape
+      </label><br>
+      <label>
+        <input type="radio" name="q2" value="q2_a4">
+        The new campus buildings suck! Bring back Gothic architecture
+      </label>
+      
+      <!-- Question 3 -->
+      <h2>3. Eating Club mask mandates: which statement best represents your views?</h2>
+      <label>
+        <input type="radio" name="q3" value="q3_a1" required>
+        They are a violation of my Constitutional right to breathe
+      </label><br>
+      <label>
+        <input type="radio" name="q3" value="q3_a2">
+        They are ruining the vibe of the eating clubs, I don’t wear them anyway
+      </label><br>
+      <label>
+        <input type="radio" name="q3" value="q3_a3">
+        The mask mandates are a necessary precaution while case counts are so high
+      </label><br>
+      <label>
+        <input type="radio" name="q3" value="q3_a4">
+        I don't go to Eating Club parties, find me at the Divest protest
+      </label><br><br>
+      
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

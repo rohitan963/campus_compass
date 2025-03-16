@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Your Campus Political Compass Result</title>
+  </head>
+  <body>
+    <h1>Your Campus Political Compass Result</h1>
+    <img src="data:image/png;base64,{{ image_data }}" alt="Compass Result">
+    <h2>Your Scores</h2>
+    <ul>
+      <li>Big-L: {{ score["Big-L"] }}</li>
+      <li>small-l: {{ score["small-l"] }}</li>
+      <li>Big-C: {{ score["Big-C"] }}</li>
+      <li>small-c: {{ score["small-c"] }}</li>
+    </ul>
+    <p>Your overall position: ({{ x_total|round(1) }}, {{ y_total|round(1) }})</p>
+    <a href="/">Take the quiz again</a>
+  </body>
+</html>
