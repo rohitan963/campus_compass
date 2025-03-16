@@ -7,16 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
       body { padding-top: 2rem; background-color: #f8f9fa; }
-      .container { max-width: 700px; }
+      .container { max-width: 800px; }
       h1 { margin-bottom: 1.5rem; }
-      .question { margin-bottom: 1.5rem; }
+      .question { margin-bottom: 2rem; }
     </style>
   </head>
   <body>
     <div class="container">
       <h1 class="text-center">Campus Political Compass Quiz</h1>
       <form action="/result" method="post">
-        <!-- Question 1 -->
+        <!-- Q1: National Politics -->
         <div class="question">
           <h4>1. National politics: which statement best represents your views?</h4>
           <div class="form-check">
@@ -44,7 +44,8 @@
             </label>
           </div>
         </div>
-        <!-- Question 2 -->
+        
+        <!-- Q2: New Campus Architecture -->
         <div class="question">
           <h4>2. New campus architecture: which statement best represents your views?</h4>
           <div class="form-check">
@@ -72,7 +73,8 @@
             </label>
           </div>
         </div>
-        <!-- Question 3 -->
+        
+        <!-- Q3: Eating Club Mask Mandates -->
         <div class="question">
           <h4>3. Eating Club mask mandates: which statement best represents your views?</h4>
           <div class="form-check">
@@ -100,6 +102,123 @@
             </label>
           </div>
         </div>
+        
+        <!-- Q4: Professor on Same-Sex Marriage -->
+        <div class="question">
+          <h4>4. A professor who’s written against same-sex marriage came to eat at a campus eating club. What would you do?</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q4" id="q4_a1" value="q4_a1" required>
+            <label class="form-check-label" for="q4_a1">
+              Ignore him, it’s a free country.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q4" id="q4_a2" value="q4_a2">
+            <label class="form-check-label" for="q4_a2">
+              Advocate that the eating club should require advance approval for guests so that LGBTQ+ students don’t have to eat with someone who denies their identity.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q4" id="q4_a3" value="q4_a3">
+            <label class="form-check-label" for="q4_a3">
+              Join the professor and the student for lunch. It’s probably an interesting conversation.
+            </label>
+          </div>
+        </div>
+        
+        <!-- Q5: Professor Used a Racial Slur -->
+        <div class="question">
+          <h4>5. A professor used a racial slur as part of his lesson plan. What should the University do?</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q5" id="q5_a1" value="q5_a1" required>
+            <label class="form-check-label" for="q5_a1">
+              The professor has academic freedom, but the student activist community needs to make it clear to him that he is not welcome on campus.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q5" id="q5_a2" value="q5_a2">
+            <label class="form-check-label" for="q5_a2">
+              Fire him. He makes students feel unwelcome and that language is unacceptable.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q5" id="q5_a3" value="q5_a3">
+            <label class="form-check-label" for="q5_a3">
+              The professor has absolute academic freedom and the purpose of a college education is to, at times, make students feel uncomfortable.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q5" id="q5_a4" value="q5_a4">
+            <label class="form-check-label" for="q5_a4">
+              I don’t like it, but just don’t take his class if it offends you.
+            </label>
+          </div>
+        </div>
+        
+        <!-- Q6: Electric Scooter Ban -->
+        <div class="question">
+          <h4>6. The electric scooter ban: which statement best represents your view?</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q6" id="q6_a1" value="q6_a1" required>
+            <label class="form-check-label" for="q6_a1">
+              I trust the campus safety officers know what they’re doing. Electric scooters are dangerous and people can get hurt.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q6" id="q6_a2" value="q6_a2">
+            <label class="form-check-label" for="q6_a2">
+              Let people ride the scooters! People need them to get to their athletic practices.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q6" id="q6_a3" value="q6_a3">
+            <label class="form-check-label" for="q6_a3">
+              Given that some people have invisible disabilities that would require a mobility device, it’s better to just not have a rule than risk the police officers stopping people and questioning them.
+            </label>
+          </div>
+        </div>
+        
+        <!-- Q7: Primary Source of Campus News -->
+        <div class="question">
+          <h4>7. What’s your primary source of campus news?</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q7" id="q7_a1" value="q7_a1" required>
+            <label class="form-check-label" for="q7_a1">
+              The Daily Princetonian
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q7" id="q7_a2" value="q7_a2">
+            <label class="form-check-label" for="q7_a2">
+              The Daily Princetonian Instagram Page
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q7" id="q7_a3" value="q7_a3">
+            <label class="form-check-label" for="q7_a3">
+              Barstool Princeton
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q7" id="q7_a4" value="q7_a4">
+            <label class="form-check-label" for="q7_a4">
+              What campus news?
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q7" id="q7_a5" value="q7_a5">
+            <label class="form-check-label" for="q7_a5">
+              The Princeton Tory
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q7" id="q7_a6" value="q7_a6">
+            <label class="form-check-label" for="q7_a6">
+              Pwitter
+            </label>
+          </div>
+        </div>
+        
         <div class="text-center">
           <button type="submit" class="btn btn-primary btn-lg">Submit</button>
         </div>

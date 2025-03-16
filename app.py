@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')  # Use a non-GUI backend to avoid Tkinter issues
+
 from flask import Flask, render_template, request
 import matplotlib.pyplot as plt
 import math
@@ -6,24 +9,44 @@ import base64
 
 app = Flask(__name__)
 
-# Mapping each answer option to its scoring in the four categories.
+# Mapping answer options for all 7 questions.
 # Keys: "Big-L", "small-l", "Big-C", "small-c"
 options = {
-    # Question 1: National politics
+    # Q1: National politics
     "q1_a1": {"small-c": 1, "small-l": 0.5},
     "q1_a2": {"small-l": 1, "small-c": 0.5},
     "q1_a3": {"Big-L": 1, "Big-C": 0.5},
     "q1_a4": {"Big-C": 1},
-    # Question 2: New campus architecture
+    # Q2: New campus architecture
     "q2_a1": {"small-l": 0.5},
     "q2_a2": {"Big-L": 1, "small-l": 0.5},
     "q2_a3": {"Big-C": 1},
     "q2_a4": {"small-c": 1},
-    # Question 3: Eating Club mask mandates
+    # Q3: Eating Club mask mandates
     "q3_a1": {"Big-C": 1},
-    "q3_a2": {"small-c": 2},
+    "q3_a2": {"small-c": 1},  # updated from +2 to +1
     "q3_a3": {"small-l": 1},
     "q3_a4": {"Big-L": 0.5},
+    # Q4: Professor on same-sex marriage
+    "q4_a1": {"small-c": 1},
+    "q4_a2": {"small-l": 1},
+    "q4_a3": {"Big-C": 1},
+    # Q5: Professor used a racial slur
+    "q5_a1": {"Big-L": 1},
+    "q5_a2": {"small-l": 1},
+    "q5_a3": {"Big-C": 1},
+    "q5_a4": {"small-c": 1},
+    # Q6: Electric scooter ban
+    "q6_a1": {"small-l": 0.5},
+    "q6_a2": {"small-c": 1},
+    "q6_a3": {"small-l": 1},
+    # Q7: Primary source of campus news
+    "q7_a1": {"Big-L": 1, "Big-C": 0.5},
+    "q7_a2": {"small-l": 0.5},
+    "q7_a3": {"small-c": 0.75},
+    "q7_a4": {"small-c": 1},
+    "q7_a5": {"Big-C": 1},
+    "q7_a6": {"Big-L": 1},
 }
 
 @app.route("/", methods=["GET"])
@@ -32,14 +55,16 @@ def index():
 
 @app.route("/result", methods=["POST"])
 def result():
-    # Get selected answers from the form.
-    q1 = request.form.get("q1")
-    q2 = request.form.get("q2")
-    q3 = request.form.get("q3")
-    
+    # Retrieve the selected answers from the form.
+    answers = []
+    for q in ["q1", "q2", "q3", "q4", "q5", "q6", "q7"]:
+        answer = request.form.get(q)
+        if answer:
+            answers.append(answer)
+
     # Initialize scores for each category.
     score = {"Big-L": 0, "small-l": 0, "Big-C": 0, "small-c": 0}
-    for answer in [q1, q2, q3]:
+    for answer in answers:
         if answer in options:
             for key, value in options[answer].items():
                 score[key] += value
@@ -51,15 +76,13 @@ def result():
         "Big-C": math.radians(135),
         "small-l": math.radians(225),
     }
-    
     x_total = sum(score[k] * math.cos(angles[k]) for k in score)
     y_total = sum(score[k] * math.sin(angles[k]) for k in score)
     
-    # Determine the faction with the highest score.
+    # Determine dominant faction.
     dominant_faction = max(score, key=score.get)
 
-    # Dynamically set the plot limits so that arrows expand to fill the graph.
-    # Use a minimum limit so the graph never gets too cramped.
+    # Dynamically set plot limits.
     margin = 2
     limit = max(5, margin + max(abs(x_total), abs(y_total)) * 1.2)
     
@@ -69,12 +92,12 @@ def result():
     ax.set_ylim(-limit, limit)
     ax.set_aspect('equal')
     
-    # Draw a dashed circle for reference (using a radius that's a fraction of limit).
+    # Draw a dashed reference circle.
     circle_radius = limit * 0.2
     circle = plt.Circle((0, 0), circle_radius, fill=False, linestyle='--', color='gray')
     ax.add_artist(circle)
     
-    # Draw the four arrows; scale them so they reach near the edge.
+    # Draw the four arrows scaled to nearly fill the plot.
     arrow_length = limit - margin
     arrow_data = [
         (315, "Big-L"),
@@ -90,12 +113,12 @@ def result():
                 (arrow_length + margin*0.3) * math.sin(rad),
                 label, ha='center', va='center', fontsize=12, fontweight='bold')
     
-    # Plot the user's score as a red dot and label it "YOU"
+    # Plot the user's score as a red dot labeled "YOU".
     ax.plot(x_total, y_total, 'ro', markersize=10)
     ax.text(x_total, y_total, " YOU", color='red', fontsize=12, fontweight='bold')
     plt.title("Campus Political Compass: Your Position")
     
-    # Convert the plot to PNG image encoded in base64.
+    # Convert plot to PNG and encode in base64.
     buf = BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0)
