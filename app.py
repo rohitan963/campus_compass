@@ -6,7 +6,7 @@ import base64
 
 app = Flask(__name__)
 
-# Map each answer option to its scoring in the four categories.
+# Mapping each answer option to its scoring in the four categories.
 # Keys: "Big-L", "small-l", "Big-C", "small-c"
 options = {
     # Question 1: National politics
@@ -28,12 +28,11 @@ options = {
 
 @app.route("/", methods=["GET"])
 def index():
-    # Render the form to ask the questions.
     return render_template("index.html")
 
 @app.route("/result", methods=["POST"])
 def result():
-    # Retrieve the selected answers from the form.
+    # Get selected answers from the form.
     q1 = request.form.get("q1")
     q2 = request.form.get("q2")
     q3 = request.form.get("q3")
@@ -45,7 +44,7 @@ def result():
             for key, value in options[answer].items():
                 score[key] += value
 
-    # Define angles (in radians) for each category.
+    # Compute overall (x, y) using each faction’s contribution.
     angles = {
         "Big-L": math.radians(315),
         "small-c": math.radians(45),
@@ -53,22 +52,30 @@ def result():
         "small-l": math.radians(225),
     }
     
-    # Compute the overall (x, y) by summing each category's contribution.
     x_total = sum(score[k] * math.cos(angles[k]) for k in score)
     y_total = sum(score[k] * math.sin(angles[k]) for k in score)
+    
+    # Determine the faction with the highest score.
+    dominant_faction = max(score, key=score.get)
 
+    # Dynamically set the plot limits so that arrows expand to fill the graph.
+    # Use a minimum limit so the graph never gets too cramped.
+    margin = 2
+    limit = max(5, margin + max(abs(x_total), abs(y_total)) * 1.2)
+    
     # Create the compass plot.
     fig, ax = plt.subplots(figsize=(6, 6))
-    # Adjust limits if needed (here we use a wider range to see the user's dot clearly)
-    ax.set_xlim(-5, 5)
-    ax.set_ylim(-5, 5)
+    ax.set_xlim(-limit, limit)
+    ax.set_ylim(-limit, limit)
     ax.set_aspect('equal')
-
-    # Draw a dashed circle as a reference.
-    circle = plt.Circle((0, 0), 1, fill=False, linestyle='--', color='gray')
+    
+    # Draw a dashed circle for reference (using a radius that's a fraction of limit).
+    circle_radius = limit * 0.2
+    circle = plt.Circle((0, 0), circle_radius, fill=False, linestyle='--', color='gray')
     ax.add_artist(circle)
-
-    # Draw the four axes as arrows.
+    
+    # Draw the four arrows; scale them so they reach near the edge.
+    arrow_length = limit - margin
     arrow_data = [
         (315, "Big-L"),
         (45, "small-c"),
@@ -77,24 +84,26 @@ def result():
     ]
     for angle_deg, label in arrow_data:
         rad = math.radians(angle_deg)
-        dx, dy = math.cos(rad), math.sin(rad)
-        ax.arrow(0, 0, dx, dy, head_width=0.2, head_length=0.3, fc='k', ec='k')
-        ax.text(1.2 * dx, 1.2 * dy, label, ha='center', va='center', fontsize=12)
-
-    # Plot the user's score as a red dot.
+        dx, dy = arrow_length * math.cos(rad), arrow_length * math.sin(rad)
+        ax.arrow(0, 0, dx, dy, head_width=limit*0.05, head_length=limit*0.08, fc='black', ec='black')
+        ax.text((arrow_length + margin*0.3) * math.cos(rad),
+                (arrow_length + margin*0.3) * math.sin(rad),
+                label, ha='center', va='center', fontsize=12, fontweight='bold')
+    
+    # Plot the user's score as a red dot and label it "YOU"
     ax.plot(x_total, y_total, 'ro', markersize=10)
-    ax.text(x_total, y_total, f" ({x_total:.1f}, {y_total:.1f})", color='red')
-
+    ax.text(x_total, y_total, " YOU", color='red', fontsize=12, fontweight='bold')
     plt.title("Campus Political Compass: Your Position")
     
-    # Convert the plot to a PNG image and encode it in base64.
+    # Convert the plot to PNG image encoded in base64.
     buf = BytesIO()
-    plt.savefig(buf, format='png')
+    plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0)
     image_data = base64.b64encode(buf.getvalue()).decode('utf-8')
     plt.close(fig)
     
-    return render_template("result.html", image_data=image_data, score=score, x_total=x_total, y_total=y_total)
+    return render_template("result.html", image_data=image_data, score=score,
+                           x_total=x_total, y_total=y_total, dominant_faction=dominant_faction)
 
 if __name__ == "__main__":
     app.run(debug=True)

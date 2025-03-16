@@ -3,18 +3,33 @@
   <head>
     <meta charset="utf-8">
     <title>Your Campus Political Compass Result</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body { padding-top: 2rem; background-color: #f8f9fa; }
+      .container { max-width: 800px; }
+      h1 { margin-bottom: 1rem; }
+      .result { margin-top: 2rem; }
+    </style>
   </head>
   <body>
-    <h1>Your Campus Political Compass Result</h1>
-    <img src="data:image/png;base64,{{ image_data }}" alt="Compass Result">
-    <h2>Your Scores</h2>
-    <ul>
-      <li>Big-L: {{ score["Big-L"] }}</li>
-      <li>small-l: {{ score["small-l"] }}</li>
-      <li>Big-C: {{ score["Big-C"] }}</li>
-      <li>small-c: {{ score["small-c"] }}</li>
-    </ul>
-    <p>Your overall position: ({{ x_total|round(1) }}, {{ y_total|round(1) }})</p>
-    <a href="/">Take the quiz again</a>
+    <div class="container text-center">
+      <h1>Your Campus Political Compass Result</h1>
+      <img src="data:image/png;base64,{{ image_data }}" alt="Compass Result" class="img-fluid my-4">
+      <div class="result">
+        <h3>You are a <strong>{{ dominant_faction }}</strong></h3>
+        <p>Your Scores:</p>
+        <ul class="list-group list-group-horizontal justify-content-center">
+          <li class="list-group-item">Big-L: {{ score["Big-L"] }}</li>
+          <li class="list-group-item">small-l: {{ score["small-l"] }}</li>
+          <li class="list-group-item">Big-C: {{ score["Big-C"] }}</li>
+          <li class="list-group-item">small-c: {{ score["small-c"] }}</li>
+        </ul>
+        <p class="mt-3">Your overall position: ({{ x_total|round(1) }}, {{ y_total|round(1) }})</p>
+        <a href="/" class="btn btn-secondary mt-3">Take the Quiz Again</a>
+      </div>
+    </div>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
