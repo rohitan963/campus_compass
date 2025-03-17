@@ -24,7 +24,7 @@ options = {
     "q2_a4": {"small-c": 1},
     # Q3: Eating Club mask mandates
     "q3_a1": {"Big-C": 1},
-    "q3_a2": {"small-c": 1},  # updated from +2 to +1
+    "q3_a2": {"small-c": 1},
     "q3_a3": {"small-l": 1},
     "q3_a4": {"Big-L": 0.5},
     # Q4: Professor on same-sex marriage
@@ -47,6 +47,34 @@ options = {
     "q7_a4": {"small-c": 1},
     "q7_a5": {"Big-C": 1},
     "q7_a6": {"Big-L": 1},
+}
+
+# Descriptions for each dominant faction
+faction_descriptions = {
+    "Big-L": (
+        "You’re the activist—the one organizing protests and taking strong public stands for change. "
+        "Your commitment to progressive causes like climate action and social justice is clear. "
+        "You drive the progressive agenda on campus, even if your approach can be dynamic over time."
+    ),
+    "small-l": (
+        "You lean progressive in your values and support social change, but you work more behind the scenes. "
+        "Your focus is on practical improvements like better diversity initiatives and enhanced student services. "
+        "Your ideas steadily influence campus culture."
+    ),
+    "small-c": (
+        "You favor preserving traditions and maintaining a stable campus environment. "
+        "You’re cautious about rapid or radical changes and value the established structures. "
+        "Even if you’re a Democrat off campus, on campus you tend to lean conservative in protecting familiar norms."
+    ),
+    "Big-C": (
+        "You represent a more ideologically driven conservative perspective. "
+        "You are vocal about traditional values and tend to challenge what you see as progressive excesses. "
+        "Although a small group on campus, you rely on external amplification of your views."
+    ),
+    "Balanced": (
+        "Your views are balanced or centrist, drawing on strengths from multiple perspectives. "
+        "You blend progressive passion with conservative caution, reflecting an integrated, thoughtful approach to campus issues."
+    )
 }
 
 @app.route("/", methods=["GET"])
@@ -79,8 +107,15 @@ def result():
     x_total = sum(score[k] * math.cos(angles[k]) for k in score)
     y_total = sum(score[k] * math.sin(angles[k]) for k in score)
     
-    # Determine dominant faction.
-    dominant_faction = max(score, key=score.get)
+    # Determine dominant faction with tie-handling.
+    max_score = max(score.values())
+    dominant_keys = [k for k, v in score.items() if v == max_score]
+    if len(dominant_keys) == 1:
+        dominant_faction = dominant_keys[0]
+    else:
+        dominant_faction = "Balanced"
+    
+    result_description = faction_descriptions.get(dominant_faction, "")
 
     # Dynamically set plot limits.
     margin = 2
@@ -125,8 +160,15 @@ def result():
     image_data = base64.b64encode(buf.getvalue()).decode('utf-8')
     plt.close(fig)
     
-    return render_template("result.html", image_data=image_data, score=score,
-                           x_total=x_total, y_total=y_total, dominant_faction=dominant_faction)
+    return render_template(
+        "result.html",
+        image_data=image_data,
+        score=score,
+        x_total=x_total,
+        y_total=y_total,
+        dominant_faction=dominant_faction,
+        result_description=result_description
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
